@@ -5,10 +5,9 @@
 *.Rproj
 
 # Quarto
-_quarto/
-*.html
-*.pdf
+/.quarto/
 
 # OS
 .DS_Store
 
+**/*.quarto_ipynb
