@@ -28,14 +28,48 @@ jobs:
         with:
           r-version: '4.3'
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libcurl4-openssl-dev \
+            libxml2-dev \
+            libssl-dev \
+            libfontconfig1-dev \
+            libfreetype6-dev \
+            libfribidi-dev \
+            libharfbuzz-dev \
+            libjpeg-dev \
+            libpng-dev \
+            libtiff-dev \
+            libgit2-dev
+
+      - name: Cache R packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.R/library
+          key: ${{ runner.os }}-r-${{ hashFiles('.github/workflows/quarto-publish.yml') }}-${{ hashFiles('Regressioanalyysi.qmd') }}
+          restore-keys: |
+            ${{ runner.os }}-r-
+
       - name: Install R dependencies
         run: |
           Rscript -e "
             options(repos = 'https://cloud.r-project.org')
-            install.packages(c('wooldridge', 'car'), dependencies=TRUE)
+            # Install packages with all dependencies
+            if (!require('wooldridge', quietly = TRUE)) {
+              cat('Installing wooldridge...\n')
+              install.packages('wooldridge', dependencies=TRUE)
+            }
+            if (!require('car', quietly = TRUE)) {
+              cat('Installing car and dependencies...\n')
+              # Install car with all dependencies, including suggested packages
+              install.packages('car', dependencies=c('Depends', 'Imports', 'LinkingTo', 'Suggests'))
+            }
+            # Verify installation
             if (!require('wooldridge')) stop('Failed to install wooldridge')
             if (!require('car')) stop('Failed to install car')
-            cat('All packages installed successfully\n')
+            cat('All packages available\n')
           "
 
       - name: Render Quarto document
