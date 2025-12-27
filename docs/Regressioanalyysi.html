@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Regressioanalyysi keskituntipalkasta</title>
+<title>Regression Analysis of Average Hourly Wage</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -118,16 +118,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#tiivistelmä" id="toc-tiivistelmä" class="nav-link active" data-scroll-target="#tiivistelmä">Tiivistelmä</a></li>
-  <li><a href="#aineisto-ja-tutkimuskysymys" id="toc-aineisto-ja-tutkimuskysymys" class="nav-link" data-scroll-target="#aineisto-ja-tutkimuskysymys">Aineisto ja tutkimuskysymys</a></li>
-  <li><a href="#regressiomallin-sovittaminen" id="toc-regressiomallin-sovittaminen" class="nav-link" data-scroll-target="#regressiomallin-sovittaminen">Regressiomallin sovittaminen</a>
+  <li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#data-and-research-question" id="toc-data-and-research-question" class="nav-link" data-scroll-target="#data-and-research-question">Data and Research Question</a></li>
+  <li><a href="#fitting-the-regression-model" id="toc-fitting-the-regression-model" class="nav-link" data-scroll-target="#fitting-the-regression-model">Fitting the Regression Model</a>
   <ul class="collapse">
-  <li><a href="#koulutus-ja-tuntipalkka" id="toc-koulutus-ja-tuntipalkka" class="nav-link" data-scroll-target="#koulutus-ja-tuntipalkka">Koulutus ja tuntipalkka</a></li>
-  <li><a href="#potentiaalinen-työkokemus-ja-tuntipalkka" id="toc-potentiaalinen-työkokemus-ja-tuntipalkka" class="nav-link" data-scroll-target="#potentiaalinen-työkokemus-ja-tuntipalkka">Potentiaalinen työkokemus ja tuntipalkka</a></li>
-  <li><a href="#koulutus-ja-työkokemus-yhdessä" id="toc-koulutus-ja-työkokemus-yhdessä" class="nav-link" data-scroll-target="#koulutus-ja-työkokemus-yhdessä">Koulutus ja työkokemus yhdessä</a></li>
+  <li><a href="#education-and-hourly-wage" id="toc-education-and-hourly-wage" class="nav-link" data-scroll-target="#education-and-hourly-wage">Education and Hourly Wage</a></li>
+  <li><a href="#potential-work-experience-and-hourly-wage" id="toc-potential-work-experience-and-hourly-wage" class="nav-link" data-scroll-target="#potential-work-experience-and-hourly-wage">Potential Work Experience and Hourly Wage</a></li>
+  <li><a href="#education-and-work-experience-together" id="toc-education-and-work-experience-together" class="nav-link" data-scroll-target="#education-and-work-experience-together">Education and Work Experience Together</a></li>
   </ul></li>
-  <li><a href="#selitettävyys" id="toc-selitettävyys" class="nav-link" data-scroll-target="#selitettävyys">Selitettävyys</a></li>
-  <li><a href="#yhteenveto" id="toc-yhteenveto" class="nav-link" data-scroll-target="#yhteenveto">Yhteenveto</a></li>
+  <li><a href="#explanatory-power" id="toc-explanatory-power" class="nav-link" data-scroll-target="#explanatory-power">Explanatory Power</a></li>
+  <li><a href="#summary-1" id="toc-summary-1" class="nav-link" data-scroll-target="#summary-1">Summary</a></li>
   </ul>
 </nav>
     </div>
@@ -136,7 +136,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Regressioanalyysi keskituntipalkasta</h1>
+<h1 class="title">Regression Analysis of Average Hourly Wage</h1>
 </div>
 
 
@@ -153,44 +153,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="tiivistelmä" class="level2">
-<h2 class="anchored" data-anchor-id="tiivistelmä">Tiivistelmä</h2>
-<p>Tässä työssä analysoidaan vuonna 1976 tehtyä aineistoa (wage1) ja tarkastellaan, miten koulutuksen pituus ja työkokemus liittyvät keskituntipalkkaan.</p>
-<p>Analyysi etenee yksinkertaisista regressiomalleista monimuuttujaiseen malliin, jossa koulutuksen ja työkokemuksen vaikutuksia arvioidaan samanaikaisesti. Lisäksi tuloksia havainnollistetaan graafisesti ja mallien selitysvoimaa vertaillaan.</p>
-<p>Työn tarkoituksena on osoittaa perusvalmiudet tilastolliseen mallintamiseen R:llä, tulosten tulkintaan sekä analyysin selkeään raportointiin.</p>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>This work analyzes data from 1976 (wage1) and examines how the length of education and work experience relate to average hourly wage.</p>
+<p>The analysis progresses from simple regression models to a multivariate model, where the effects of education and work experience are assessed simultaneously. In addition, results are illustrated graphically and the explanatory power of the models is compared.</p>
+<p>The purpose of this work is to demonstrate basic skills in statistical modeling with R, interpretation of results, and clear reporting of the analysis.</p>
 </section>
-<section id="aineisto-ja-tutkimuskysymys" class="level2">
-<h2 class="anchored" data-anchor-id="aineisto-ja-tutkimuskysymys">Aineisto ja tutkimuskysymys</h2>
-<p>Analyysissä käytetään <code>wage1</code>-aineistoa, joka sisältää tietoja 526 henkilöstä vuodelta 1976. Aineistossa on muun muassa tietoja keskituntipalkasta, asuinpaikasta, koulutuksen määrästä jne.</p>
-<p>Tutkimuskysymys on: Voidaanko (ja jos voidaan niin miten hyvin) keskituntipalkkaa selittää koulutuksella ja työkokemuksella, erikseen ja yhdessä?</p>
+<section id="data-and-research-question" class="level2">
+<h2 class="anchored" data-anchor-id="data-and-research-question">Data and Research Question</h2>
+<p>The analysis uses the <code>wage1</code> dataset, which contains information on 526 individuals from 1976. The dataset includes, among other things, information on average hourly wage, place of residence, amount of education, etc.</p>
+<p>The research question is: Can (and if so, how well) average hourly wage be explained by education and work experience, separately and together?</p>
 </section>
-<section id="regressiomallin-sovittaminen" class="level2">
-<h2 class="anchored" data-anchor-id="regressiomallin-sovittaminen">Regressiomallin sovittaminen</h2>
-<p>Estimoidaan lineaariset regressiomallit tutkimuskysymyksien tarkasteluun. Havainnollistetaan tilanteita sekä visuaalisesti että tilastollisesti</p>
-<section id="koulutus-ja-tuntipalkka" class="level3">
-<h3 class="anchored" data-anchor-id="koulutus-ja-tuntipalkka">Koulutus ja tuntipalkka</h3>
+<section id="fitting-the-regression-model" class="level2">
+<h2 class="anchored" data-anchor-id="fitting-the-regression-model">Fitting the Regression Model</h2>
+<p>We estimate linear regression models to examine the research questions. We illustrate the situations both visually and statistically</p>
+<section id="education-and-hourly-wage" class="level3">
+<h3 class="anchored" data-anchor-id="education-and-hourly-wage">Education and Hourly Wage</h3>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>fit1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> educ, <span class="at">data =</span> wage1)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(wage1<span class="sc">$</span>educ, wage1<span class="sc">$</span>wage, </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Koulutuksen pituus ja keskituntipalkka vuonna 1976"</span>,</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Koulutuksen pituus vuosissa"</span>,</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Keskituntipalkka"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Length of education and average hourly wage in 1976"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Length of education in years"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Average hourly wage"</span>)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(fit1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="Regressioanalyysi_files/figure-html/plot-educ-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption>Hajontakuvio keskituntipalkasta suhteessa koulutuksen pituuteen</figcaption>
+<figcaption>Scatter plot of average hourly wage relative to length of education</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Hajontakuvio paljastaa meille, että lineaarinen malli näyttää positiivisen yhteyden koulutuksen pituuden ja tuntipalkan välillä. Sovitettu regressiosuora nousee ylöspäin, mikä viittaa siihen, että pidemmällä koulutuksella on keskimäärin positiivinen yhteys palkkaan, mikä tuntuukin hyvin intuitiiviselta.</p>
-<p>Kuitenkin havaitaan, että residuaalit ovat isoja ja pitempi koulutus näyttää kasvattavan poikkeamia. Toisin sanoen vaihtelu on paljon suurempaa, kun koulutuksen pituus kasvaa. Tämä tarkoittaa, että koulutus selittää tuntipalkkaa positiivisesti, mutta sen myötä varianssi havaintojen välillä kasvaa.</p>
-<p>Tarkastellaan tätä tilastollisesti:</p>
+<p>The scatter plot reveals to us that the linear model shows a positive relationship between the length of education and hourly wage. The fitted regression line slopes upward, which suggests that longer education has on average a positive relationship with wage, which seems very intuitive.</p>
+<p>However, it is observed that the residuals are large and longer education appears to increase deviations. In other words, variation is much greater when the length of education increases. This means that education explains hourly wage positively, but along with it, the variance between observations increases.</p>
+<p>Let us examine this statistically:</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -213,33 +213,33 @@ Multiple R-squared:  0.1648,    Adjusted R-squared:  0.1632
 F-statistic: 103.4 on 1 and 524 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
-<p>Tulokset osoittavat tilastollisesti merkitsevän positiivisen yhteyden. Testisuure on noin 103, mikä on valtavan suuri ja hylkää vahvasti nollahypoteesin siitä, että yhteyttä ei ole. R²-kerroin kertoo, mikä osuus palkkojen vaihtelusta selittyy koulutuksella.</p>
-<p>Siitä huolimatta on huomioitava, että suuret residuaalit viittaavat siihen, että kokonaistuntiansioon vaikuttaa selkeästi muitakin tekijöitä kuin koulutus.</p>
+<p>The results show a statistically significant positive relationship. The test statistic is approximately 103, which is extremely large and strongly rejects the null hypothesis that there is no relationship. The R² coefficient tells us what proportion of the variation in wages is explained by education.</p>
+<p>Nevertheless, it should be noted that the large residuals suggest that clearly other factors besides education affect total hourly earnings.</p>
 </section>
-<section id="potentiaalinen-työkokemus-ja-tuntipalkka" class="level3">
-<h3 class="anchored" data-anchor-id="potentiaalinen-työkokemus-ja-tuntipalkka">Potentiaalinen työkokemus ja tuntipalkka</h3>
-<p>Selvennetään aluksi, mitä tarkoittaa <em>potentiaalinen</em> työkokemus. Se tarkoittaa sitä aikaa, jonka henkilön on ollut mahdollista olla työssä. Se ei siis suoraan kerro meille sitä aikaa, jonka henkilö on ollut oikeasti töissä.</p>
+<section id="potential-work-experience-and-hourly-wage" class="level3">
+<h3 class="anchored" data-anchor-id="potential-work-experience-and-hourly-wage">Potential Work Experience and Hourly Wage</h3>
+<p>Let us first clarify what <em>potential</em> work experience means. It refers to the time during which a person has been able to be in the workforce. It does not directly tell us the time during which the person has actually been working.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> exper, <span class="at">data =</span> wage1)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(wage1<span class="sc">$</span>exper, wage1<span class="sc">$</span>wage, </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Työkokemus ja keskituntipalkka vuonna 1976"</span>,</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Potentiaalisen työkokemuksen pituus vuosissa"</span>,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Keskituntipalkka"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Work experience and average hourly wage in 1976"</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Length of potential work experience in years"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Average hourly wage"</span>)</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(fit2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="Regressioanalyysi_files/figure-html/plot-exper-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption>Hajontakuvio keskituntipalkasta suhteessa potentiaaliseen työkokemukseen</figcaption>
+<figcaption>Scatter plot of average hourly wage relative to potential work experience</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>(Potentiaalisen) työkokemuksen ja palkkojen välinen yhteys näyttää myös positiiviselta, mutta kuvio eroaa koulutuksesta. Hajontakuvio osoittaa, että palkat yleensä kasvavat kokemuksen myötä, mutta yhteys vaikuttaa selvästi heikommalta kuin koulutuksessa. Vaihtelu puolestaan on tässä tapauksessa jo valtavaa. Huomataan myös, että vaihtelu on suurinta noin 20–30 vuoden kohdalla ja suurin osa havainnoista on selkeästi alkupäässä.</p>
-<p>Tarkastellaan tätä tilastollisesti:</p>
+<p>The relationship between (potential) work experience and wages also appears positive, but the pattern differs from education. The scatter plot shows that wages generally increase with experience, but the relationship appears clearly weaker than with education. Variation, on the other hand, is already substantial in this case. It is also noted that variation is greatest around 20–30 years and most observations are clearly at the beginning.</p>
+<p>Let us examine this statistically:</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -262,28 +262,28 @@ Multiple R-squared:  0.01275,   Adjusted R-squared:  0.01086
 F-statistic: 6.766 on 1 and 524 DF,  p-value: 0.009555</code></pre>
 </div>
 </div>
-<p>Testisuure on noin 6,8, mikä on reilusti pienempi kuin koulutuksessa (103). Testisuure on niin iso, että nolahypoteesi hylättäisiin kaikilla normaalilla merkitsevyystasolla. Mitä tämä kertoo? Se kertoo, että on jokin tilastollisesti merkittävä yhteys eli lineaarinen malli periaatteessa voidaan sovittaa. Siitä huolimatta varianssi on todella merkittävä ja hajontaa on kaikkialla niin paljon, että keskituntipalkan selittäminen pelkällä työkokemuksella ei ole mielekästä</p>
+<p>The test statistic is approximately 6.8, which is considerably smaller than with education (103). The test statistic is so large that the null hypothesis would be rejected at all normal significance levels. What does this tell us? It tells us that there is some statistically significant relationship, i.e., a linear model can in principle be fitted. Nevertheless, the variance is truly substantial and there is so much scatter everywhere that explaining average hourly wage with work experience alone is not meaningful.</p>
 </section>
-<section id="koulutus-ja-työkokemus-yhdessä" class="level3">
-<h3 class="anchored" data-anchor-id="koulutus-ja-työkokemus-yhdessä">Koulutus ja työkokemus yhdessä</h3>
+<section id="education-and-work-experience-together" class="level3">
+<h3 class="anchored" data-anchor-id="education-and-work-experience-together">Education and Work Experience Together</h3>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fit3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> educ <span class="sc">+</span> exper, <span class="at">data =</span> wage1)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">avPlots</span>(fit3, <span class="at">main =</span> <span class="st">"Keskituntipalkan selittäjänä koulutus ja työkokemus"</span>, </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">avPlots</span>(fit3, <span class="at">main =</span> <span class="st">"Education and work experience as predictors of average hourly wage"</span>, </span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">id =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="Regressioanalyysi_files/figure-html/avplots-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption>Keskituntipalkan selittäjänä koulutus ja työkokemus</figcaption>
+<figcaption>Education and work experience as predictors of average hourly wage</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Osittaisregressiokuvat havainnollistavat palkkojen ja kunkin selittävän muuttujan välisiä osittaisia yhteyksiä. Vasen puoli näyttää palkkojen ja koulutuksen välisen yhteyden kokemuksen vaikutuksen poistamisen jälkeen, kun taas oikea puoli näyttää palkkojen ja kokemuksen välisen yhteyden koulutuksen vaikutuksen poistamisen jälkeen.</p>
-<p>Molemmissa paneeleissa positiiviset kulmakertoimet vahvistavat, että sekä koulutuksella että kokemuksella on riippumattomat positiiviset yhteydet palkkoihin, vaikka niiden välinen korrelaatio otetaankin huomioon. Hajonta sovitettujen suorien ympärillä näissä kuvissa edustaa residuaalista vaihtelua, jota malli ei selitä.</p>
+<p>Partial regression plots illustrate the partial relationships between wages and each explanatory variable. The left side shows the relationship between wages and education after removing the effect of experience, while the right side shows the relationship between wages and experience after removing the effect of education.</p>
+<p>In both panels, the positive slopes confirm that both education and experience have independent positive relationships with wages, even when the correlation between them is taken into account. The scatter around the fitted lines in these plots represents residual variation that the model does not explain.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -307,29 +307,29 @@ Multiple R-squared:  0.2252,    Adjusted R-squared:  0.2222
 F-statistic: 75.99 on 2 and 523 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
-<p>Kolmannessa mallissa otetaan huomioon sekä koulutus että työkokemus selittävinä muuttujina. Tämä on tarpeen, koska koulutus ja kokemus saattavat olla korreloituneita ja niiden yksittäiset vaikutukset saattavat sekoittua, kun niitä tarkastellaan erikseen.</p>
+<p>In the third model, both education and work experience are taken into account as explanatory variables. This is necessary because education and experience may be correlated and their individual effects may be confounded when examined separately.</p>
 </section>
 </section>
-<section id="selitettävyys" class="level2">
-<h2 class="anchored" data-anchor-id="selitettävyys">Selitettävyys</h2>
+<section id="explanatory-power" class="level2">
+<h2 class="anchored" data-anchor-id="explanatory-power">Explanatory Power</h2>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Malli 1 (vain koulutus) R²: 0.1648 </code></pre>
+<pre><code>Model 1 (education only) R²: 0.1648 </code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Malli 2 (vain kokemus) R²: 0.0127 </code></pre>
+<pre><code>Model 2 (experience only) R²: 0.0127 </code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Malli 3 (koulutus + kokemus) R²: 0.2252 </code></pre>
+<pre><code>Model 3 (education + experience) R²: 0.2252 </code></pre>
 </div>
 </div>
-<p>Kun tutkitaan selitettävyysastetta niin huomataan, että se on korkeimillaan silloin kun selittäjinä ovat sekä kokemus että koulutus. Huomataan myös, että aineiston pohjalta koulutus selittää ylipäätänsä keskituntipalkkaa paremmin kuin kokemus, koska sen selitysaste on korkeampi. Tämä tuntuu äsken tehdyn analyysin jälkeen luonnolliselta.</p>
+<p>When examining the degree of explanatory power, it is noted that it is highest when both experience and education are predictors. It is also noted that based on the data, education explains average hourly wage better overall than experience, because its explanatory power is higher. This seems natural after the analysis just performed.</p>
 </section>
-<section id="yhteenveto" class="level2">
-<h2 class="anchored" data-anchor-id="yhteenveto">Yhteenveto</h2>
-<p>Analyysistä saadaan useita eri ulottuvuuksia. Ensinnäkin, sekä koulutus että kokemus liittyvät yksilöllisesti korkeampiin keskituntipalkkoihin, kuten yksinkertaisissa regressiomalleissa tilastollisesti merkitsevät positiiviset kertoimet osoittavat. Toiseksi, kun muuttujia tarkastellaan yhdessä monimuuttujamallissa, molemmat pysyvät merkitsevinä palkkojen selittäjinä, mikä viittaa siihen, että ne täydentävät toisiaan palkkojen selittämisessä.</p>
-<p>Näistä havainnoista huolimatta on tärkeää huomata, että huomattava osa palkkojen vaihtelusta jää selittämättä näillä kahdella muuttujalla. R²-arvot, vaikka osoittavatkin merkityksellisiä yhteyksiä, jättävät huomattavan osan palkkojen vaihtelusta selittämättä. Tämä viittaa siihen, että muut tekijät—kuten kyvykkyys, toimiala, ammatti, sijainti tai havaitsemattomat ominaisuudet—vaikuttavat merkittävästi palkkojen määräytymiseen.</p>
-<p>Loppujen lopuksi näyttää siis siltä, että mitä enemmän lisäämme selittäjiä, sitä suurempi selitysaste lopulta on. Tätä emme voi kuitenkaan varmaksi sanoa tämän aineiston pohjalta.</p>
+<section id="summary-1" class="level2">
+<h2 class="anchored" data-anchor-id="summary-1">Summary</h2>
+<p>The analysis yields several different dimensions. First, both education and experience are individually associated with higher average hourly wages, as the statistically significant positive coefficients in the simple regression models show. Second, when the variables are examined together in a multivariate model, both remain significant predictors of wages, which suggests that they complement each other in explaining wages.</p>
+<p>Despite these observations, it is important to note that a substantial portion of the variation in wages remains unexplained by these two variables. The R² values, although they show meaningful relationships, leave a substantial portion of the variation in wages unexplained. This suggests that other factors—such as ability, industry, occupation, location, or unobserved characteristics—significantly affect wage determination.</p>
+<p>In the end, it thus appears that the more predictors we add, the greater the explanatory power ultimately is. However, we cannot say this for certain based on this dataset.</p>
 
 
 </section>

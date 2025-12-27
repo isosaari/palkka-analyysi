@@ -1,5 +1,5 @@
 ---
-title: "Regressioanalyysi keskituntipalkasta"
+title: "Regression Analysis of Average Hourly Wage"
 format: html
 toc: true
 code-fold: show
@@ -9,25 +9,25 @@ message: false
 ---
 
 
-## Tiivistelmä
+## Summary
 
-Tässä työssä analysoidaan vuonna 1976 tehtyä aineistoa (wage1) ja tarkastellaan, miten koulutuksen pituus ja työkokemus liittyvät keskituntipalkkaan.
+This work analyzes data from 1976 (wage1) and examines how the length of education and work experience relate to average hourly wage.
 
-Analyysi etenee yksinkertaisista regressiomalleista monimuuttujaiseen malliin, jossa koulutuksen ja työkokemuksen vaikutuksia arvioidaan samanaikaisesti. Lisäksi tuloksia havainnollistetaan graafisesti ja mallien selitysvoimaa vertaillaan.
+The analysis progresses from simple regression models to a multivariate model, where the effects of education and work experience are assessed simultaneously. In addition, results are illustrated graphically and the explanatory power of the models is compared.
 
-Työn tarkoituksena on osoittaa perusvalmiudet tilastolliseen mallintamiseen R:llä, tulosten tulkintaan sekä analyysin selkeään raportointiin.
-
-
-## Aineisto ja tutkimuskysymys
-
-Analyysissä käytetään `wage1`-aineistoa, joka sisältää tietoja 526 henkilöstä vuodelta 1976. Aineistossa on muun muassa tietoja keskituntipalkasta, asuinpaikasta, koulutuksen määrästä jne.
-
-Tutkimuskysymys on: Voidaanko (ja jos voidaan niin miten hyvin) keskituntipalkkaa selittää koulutuksella ja työkokemuksella, erikseen ja yhdessä?
+The purpose of this work is to demonstrate basic skills in statistical modeling with R, interpretation of results, and clear reporting of the analysis.
 
 
-## Regressiomallin sovittaminen
+## Data and Research Question
 
-Estimoidaan lineaariset regressiomallit tutkimuskysymyksien tarkasteluun. Havainnollistetaan tilanteita sekä visuaalisesti että tilastollisesti
+The analysis uses the `wage1` dataset, which contains information on 526 individuals from 1976. The dataset includes, among other things, information on average hourly wage, place of residence, amount of education, etc.
+
+The research question is: Can (and if so, how well) average hourly wage be explained by education and work experience, separately and together?
+
+
+## Fitting the Regression Model
+
+We estimate linear regression models to examine the research questions. We illustrate the situations both visually and statistically
 
 ```{r}
 #| label: setup
@@ -39,25 +39,25 @@ data(wage1)
 ```
 
 
-### Koulutus ja tuntipalkka
+### Education and Hourly Wage
 
 ```{r}
 #| label: plot-educ
-#| fig-cap: "Hajontakuvio keskituntipalkasta suhteessa koulutuksen pituuteen"
+#| fig-cap: "Scatter plot of average hourly wage relative to length of education"
 
 fit1 <- lm(wage ~ educ, data = wage1)
 plot(wage1$educ, wage1$wage, 
-     main = "Koulutuksen pituus ja keskituntipalkka vuonna 1976",
-     xlab = "Koulutuksen pituus vuosissa",
-     ylab = "Keskituntipalkka")
+     main = "Length of education and average hourly wage in 1976",
+     xlab = "Length of education in years",
+     ylab = "Average hourly wage")
 abline(fit1)
 ```
 
-Hajontakuvio paljastaa meille, että lineaarinen malli näyttää positiivisen yhteyden koulutuksen pituuden ja tuntipalkan välillä. Sovitettu regressiosuora nousee ylöspäin, mikä viittaa siihen, että pidemmällä koulutuksella on keskimäärin positiivinen yhteys palkkaan, mikä tuntuukin hyvin intuitiiviselta.
+The scatter plot reveals to us that the linear model shows a positive relationship between the length of education and hourly wage. The fitted regression line slopes upward, which suggests that longer education has on average a positive relationship with wage, which seems very intuitive.
 
-Kuitenkin havaitaan, että residuaalit ovat isoja ja pitempi koulutus näyttää kasvattavan poikkeamia. Toisin sanoen vaihtelu on paljon suurempaa, kun koulutuksen pituus kasvaa. Tämä tarkoittaa, että koulutus selittää tuntipalkkaa positiivisesti, mutta sen myötä varianssi havaintojen välillä kasvaa.
+However, it is observed that the residuals are large and longer education appears to increase deviations. In other words, variation is much greater when the length of education increases. This means that education explains hourly wage positively, but along with it, the variance between observations increases.
 
-Tarkastellaan tätä tilastollisesti:
+Let us examine this statistically:
 
 ```{r}
 #| label: model1
@@ -74,30 +74,30 @@ summary1 <- summary(fit1)
 summary1
 ```
 
-Tulokset osoittavat tilastollisesti merkitsevän positiivisen yhteyden. Testisuure on noin 103, mikä on valtavan suuri ja hylkää vahvasti nollahypoteesin siitä, että yhteyttä ei ole. R²-kerroin kertoo, mikä osuus palkkojen vaihtelusta selittyy koulutuksella.
+The results show a statistically significant positive relationship. The test statistic is approximately 103, which is extremely large and strongly rejects the null hypothesis that there is no relationship. The R² coefficient tells us what proportion of the variation in wages is explained by education.
 
-Siitä huolimatta on huomioitava, että suuret residuaalit viittaavat siihen, että kokonaistuntiansioon vaikuttaa selkeästi muitakin tekijöitä kuin koulutus.
+Nevertheless, it should be noted that the large residuals suggest that clearly other factors besides education affect total hourly earnings.
 
 
-### Potentiaalinen työkokemus ja tuntipalkka
+### Potential Work Experience and Hourly Wage
 
-Selvennetään aluksi, mitä tarkoittaa *potentiaalinen* työkokemus. Se tarkoittaa sitä aikaa, jonka henkilön on ollut mahdollista olla työssä. Se ei siis suoraan kerro meille sitä aikaa, jonka henkilö on ollut oikeasti töissä.
+Let us first clarify what *potential* work experience means. It refers to the time during which a person has been able to be in the workforce. It does not directly tell us the time during which the person has actually been working.
 
 ```{r}
 #| label: plot-exper
-#| fig-cap: "Hajontakuvio keskituntipalkasta suhteessa potentiaaliseen työkokemukseen"
+#| fig-cap: "Scatter plot of average hourly wage relative to potential work experience"
 
 fit2 <- lm(wage ~ exper, data = wage1)
 plot(wage1$exper, wage1$wage, 
-     main = "Työkokemus ja keskituntipalkka vuonna 1976",
-     xlab = "Potentiaalisen työkokemuksen pituus vuosissa",
-     ylab = "Keskituntipalkka")
+     main = "Work experience and average hourly wage in 1976",
+     xlab = "Length of potential work experience in years",
+     ylab = "Average hourly wage")
 abline(fit2)
 ```
 
-(Potentiaalisen) työkokemuksen ja palkkojen välinen yhteys näyttää myös positiiviselta, mutta kuvio eroaa koulutuksesta. Hajontakuvio osoittaa, että palkat yleensä kasvavat kokemuksen myötä, mutta yhteys vaikuttaa selvästi heikommalta kuin koulutuksessa. Vaihtelu puolestaan on tässä tapauksessa jo valtavaa. Huomataan myös, että vaihtelu on suurinta noin 20–30 vuoden kohdalla ja suurin osa havainnoista on selkeästi alkupäässä.
+The relationship between (potential) work experience and wages also appears positive, but the pattern differs from education. The scatter plot shows that wages generally increase with experience, but the relationship appears clearly weaker than with education. Variation, on the other hand, is already substantial in this case. It is also noted that variation is greatest around 20–30 years and most observations are clearly at the beginning.
 
-Tarkastellaan tätä tilastollisesti:
+Let us examine this statistically:
 
 ```{r}
 #| label: model2
@@ -114,23 +114,23 @@ summary2 <- summary(fit2)
 summary2
 ```
 
-Testisuure on noin 6,8, mikä on reilusti pienempi kuin koulutuksessa (103). Testisuure on niin iso, että nolahypoteesi hylättäisiin kaikilla normaalilla merkitsevyystasolla. Mitä tämä kertoo? Se kertoo, että on jokin tilastollisesti merkittävä yhteys eli lineaarinen malli periaatteessa voidaan sovittaa. Siitä huolimatta varianssi on todella merkittävä ja hajontaa on kaikkialla niin paljon, että keskituntipalkan selittäminen pelkällä työkokemuksella ei ole mielekästä
+The test statistic is approximately 6.8, which is considerably smaller than with education (103). The test statistic is so large that the null hypothesis would be rejected at all normal significance levels. What does this tell us? It tells us that there is some statistically significant relationship, i.e., a linear model can in principle be fitted. Nevertheless, the variance is truly substantial and there is so much scatter everywhere that explaining average hourly wage with work experience alone is not meaningful.
 
-### Koulutus ja työkokemus yhdessä
+### Education and Work Experience Together
 
 ```{r}
 #| label: avplots
-#| fig-cap: "Keskituntipalkan selittäjänä koulutus ja työkokemus"
+#| fig-cap: "Education and work experience as predictors of average hourly wage"
 fit3 <- lm(wage ~ educ + exper, data = wage1)
-avPlots(fit3, main = "Keskituntipalkan selittäjänä koulutus ja työkokemus", 
+avPlots(fit3, main = "Education and work experience as predictors of average hourly wage", 
         id = FALSE)
 
 ```
 
 
-Osittaisregressiokuvat havainnollistavat palkkojen ja kunkin selittävän muuttujan välisiä osittaisia yhteyksiä. Vasen puoli näyttää palkkojen ja koulutuksen välisen yhteyden kokemuksen vaikutuksen poistamisen jälkeen, kun taas oikea puoli näyttää palkkojen ja kokemuksen välisen yhteyden koulutuksen vaikutuksen poistamisen jälkeen.
+Partial regression plots illustrate the partial relationships between wages and each explanatory variable. The left side shows the relationship between wages and education after removing the effect of experience, while the right side shows the relationship between wages and experience after removing the effect of education.
 
-Molemmissa paneeleissa positiiviset kulmakertoimet vahvistavat, että sekä koulutuksella että kokemuksella on riippumattomat positiiviset yhteydet palkkoihin, vaikka niiden välinen korrelaatio otetaankin huomioon. Hajonta sovitettujen suorien ympärillä näissä kuvissa edustaa residuaalista vaihtelua, jota malli ei selitä.
+In both panels, the positive slopes confirm that both education and experience have independent positive relationships with wages, even when the correlation between them is taken into account. The scatter around the fitted lines in these plots represents residual variation that the model does not explain.
 
 ```{r}
 #| label: model3
@@ -147,28 +147,28 @@ summary3 <- summary(fit3)
 summary3
 ```
 
-Kolmannessa mallissa otetaan huomioon sekä koulutus että työkokemus selittävinä muuttujina. Tämä on tarpeen, koska koulutus ja kokemus saattavat olla korreloituneita ja niiden yksittäiset vaikutukset saattavat sekoittua, kun niitä tarkastellaan erikseen.
+In the third model, both education and work experience are taken into account as explanatory variables. This is necessary because education and experience may be correlated and their individual effects may be confounded when examined separately.
 
 
-## Selitettävyys
+## Explanatory Power
 
 ```{r}
 #| label: r-squared-comparison
 #| echo: false
 
-cat("Malli 1 (vain koulutus) R²:", round(summary1$r.squared, 4), "\n")
-cat("Malli 2 (vain kokemus) R²:", round(summary2$r.squared, 4), "\n")
-cat("Malli 3 (koulutus + kokemus) R²:", round(summary3$r.squared, 4), "\n")
+cat("Model 1 (education only) R²:", round(summary1$r.squared, 4), "\n")
+cat("Model 2 (experience only) R²:", round(summary2$r.squared, 4), "\n")
+cat("Model 3 (education + experience) R²:", round(summary3$r.squared, 4), "\n")
 ```
 
-Kun tutkitaan selitettävyysastetta niin huomataan, että se on korkeimillaan silloin kun selittäjinä ovat sekä kokemus että koulutus. Huomataan myös, että aineiston pohjalta koulutus selittää ylipäätänsä keskituntipalkkaa paremmin kuin kokemus, koska sen selitysaste on korkeampi. Tämä tuntuu äsken tehdyn analyysin jälkeen luonnolliselta. 
+When examining the degree of explanatory power, it is noted that it is highest when both experience and education are predictors. It is also noted that based on the data, education explains average hourly wage better overall than experience, because its explanatory power is higher. This seems natural after the analysis just performed. 
 
 
-## Yhteenveto
+## Summary
 
 
-Analyysistä saadaan useita eri ulottuvuuksia. Ensinnäkin, sekä koulutus että kokemus liittyvät yksilöllisesti korkeampiin keskituntipalkkoihin, kuten yksinkertaisissa regressiomalleissa tilastollisesti merkitsevät positiiviset kertoimet osoittavat. Toiseksi, kun muuttujia tarkastellaan yhdessä monimuuttujamallissa, molemmat pysyvät merkitsevinä palkkojen selittäjinä, mikä viittaa siihen, että ne täydentävät toisiaan palkkojen selittämisessä. 
+The analysis yields several different dimensions. First, both education and experience are individually associated with higher average hourly wages, as the statistically significant positive coefficients in the simple regression models show. Second, when the variables are examined together in a multivariate model, both remain significant predictors of wages, which suggests that they complement each other in explaining wages. 
 
-Näistä havainnoista huolimatta on tärkeää huomata, että huomattava osa palkkojen vaihtelusta jää selittämättä näillä kahdella muuttujalla. R²-arvot, vaikka osoittavatkin merkityksellisiä yhteyksiä, jättävät huomattavan osan palkkojen vaihtelusta selittämättä. Tämä viittaa siihen, että muut tekijät—kuten kyvykkyys, toimiala, ammatti, sijainti tai havaitsemattomat ominaisuudet—vaikuttavat merkittävästi palkkojen määräytymiseen.
+Despite these observations, it is important to note that a substantial portion of the variation in wages remains unexplained by these two variables. The R² values, although they show meaningful relationships, leave a substantial portion of the variation in wages unexplained. This suggests that other factors—such as ability, industry, occupation, location, or unobserved characteristics—significantly affect wage determination.
 
-Loppujen lopuksi näyttää siis siltä, että mitä enemmän lisäämme selittäjiä, sitä suurempi selitysaste lopulta on. Tätä emme voi kuitenkaan varmaksi sanoa tämän aineiston pohjalta. 
+In the end, it thus appears that the more predictors we add, the greater the explanatory power ultimately is. However, we cannot say this for certain based on this dataset. 
