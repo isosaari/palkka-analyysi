@@ -52,7 +52,7 @@ plot(wage1$educ, wage1$wage,
 abline(fit1)
 ```
 
-Hajontakuvio paljastaa, että lineaarinen malli näyttää positiivisen yhteyden koulutuksen pituuden ja tuntipalkan välillä. Sovitettu regressiosuora nousee ylöspäin, mikä viittaa siihen, että pidemmällä koulutuksella on keskimäärin positiivinen yhteys palkkaan, mikä tuntuukin hyvin intuitiiviselta.
+Hajontakuvio paljastaa meille, että lineaarinen malli näyttää positiivisen yhteyden koulutuksen pituuden ja tuntipalkan välillä. Sovitettu regressiosuora nousee ylöspäin, mikä viittaa siihen, että pidemmällä koulutuksella on keskimäärin positiivinen yhteys palkkaan, mikä tuntuukin hyvin intuitiiviselta.
 
 Kuitenkin havaitaan, että residuaalit ovat isoja ja pitempi koulutus näyttää kasvattavan poikkeamia. Toisin sanoen vaihtelu on paljon suurempaa, kun koulutuksen pituus kasvaa. Tämä tarkoittaa, että koulutus selittää tuntipalkkaa positiivisesti, mutta sen myötä varianssi havaintojen välillä kasvaa.
 
